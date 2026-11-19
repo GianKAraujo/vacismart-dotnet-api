@@ -1,0 +1,123 @@
+# Requisições prontas para testar a API VaciSmart (.NET).
+# Funciona no Visual Studio, Rider e no VS Code (extensão "REST Client").
+# Suba a API antes:  dotnet run   ->   http://localhost:5080
+# Execute na ordem: os ids 1 abaixo assumem banco recém-criado pelas migrations.
+
+@baseUrl = http://localhost:5080/api
+
+### 1. Criar unidade de saúde -> 201 Created
+POST {{baseUrl}}/unidades
+Content-Type: application/json
+
+{
+  "nome": "Unidade Demonstrativa 01",
+  "municipio": "São Paulo",
+  "uf": "SP"
+}
+
+### 2. Listar unidades -> 200 OK
+GET {{baseUrl}}/unidades
+
+### 3. Buscar unidade por id -> 200 OK
+GET {{baseUrl}}/unidades/1
+
+### 4. Atualizar unidade -> 204 No Content
+PUT {{baseUrl}}/unidades/1
+Content-Type: application/json
+
+{
+  "nome": "Unidade Demonstrativa 01 - Centro",
+  "municipio": "São Paulo",
+  "uf": "SP"
+}
+
+### 5. Criar transporte para a unidade 1 -> 201 Created
+POST {{baseUrl}}/transportes
+Content-Type: application/json
+
+{
+  "codigo": "TRP-001",
+  "unidadeDestinoId": 1,
+  "status": "EM_TRANSPORTE",
+  "observacao": "Remessa de demonstração - Vacina Demo A"
+}
+
+### 6. Listar transportes -> 200 OK
+GET {{baseUrl}}/transportes
+
+### 7. Buscar transporte por id -> 200 OK
+GET {{baseUrl}}/transportes/1
+
+### 8. Relacionamento 1:N: transportes da unidade 1 -> 200 OK
+GET {{baseUrl}}/unidades/1/transportes
+
+### 9. Atualizar transporte (confirma recebimento) -> 204 No Content
+PUT {{baseUrl}}/transportes/1
+Content-Type: application/json
+
+{
+  "codigo": "TRP-001",
+  "unidadeDestinoId": 1,
+  "status": "RECEBIDO",
+  "observacao": "Recebido e conferido na unidade"
+}
+
+### ---------- ERROS TRATADOS ----------
+
+### 10. POST inválido -> 400 Bad Request (JSON com os campos e mensagens)
+POST {{baseUrl}}/unidades
+Content-Type: application/json
+
+{
+  "nome": "",
+  "municipio": "São Paulo",
+  "uf": "sp"
+}
+
+### 11. POST transporte com status e código inválidos -> 400 Bad Request
+POST {{baseUrl}}/transportes
+Content-Type: application/json
+
+{
+  "codigo": "trp 2",
+  "unidadeDestinoId": 1,
+  "status": "VOANDO"
+}
+
+### 12. POST transporte para unidade que não existe -> 400 Bad Request
+POST {{baseUrl}}/transportes
+Content-Type: application/json
+
+{
+  "codigo": "TRP-002",
+  "unidadeDestinoId": 999
+}
+
+### 13. GET de id inexistente -> 404 Not Found
+GET {{baseUrl}}/unidades/999
+
+### 14. GET de transporte inexistente -> 404 Not Found
+GET {{baseUrl}}/transportes/999
+
+### 15. Código de transporte repetido -> 409 Conflict
+POST {{baseUrl}}/transportes
+Content-Type: application/json
+
+{
+  "codigo": "TRP-001",
+  "unidadeDestinoId": 1
+}
+
+### 16. Excluir unidade que ainda tem transportes -> 409 Conflict
+DELETE {{baseUrl}}/unidades/1
+
+### ---------- EXCLUSÃO ----------
+
+### 17. Excluir transporte -> 204 No Content
+DELETE {{baseUrl}}/transportes/1
+
+### 18. Excluir unidade (agora sem transportes) -> 204 No Content
+DELETE {{baseUrl}}/unidades/1
+
+### 19. Conferir que sumiu -> 404 Not Found
+GET {{baseUrl}}/unidades/1
