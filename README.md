@@ -14,7 +14,7 @@
 | Giovanni Sacristan | RM567548 | 2TDSPA |
 | Murilo Massini | RM567383 | 2TDSPA |
 
-**Vídeo de demonstração (até 5 min):** _COLAR_LINK_DO_YOUTUBE_
+**Vídeo de demonstração (até 5 min):** https://youtu.be/bewo6oRARp8
 
 ---
 
