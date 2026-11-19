@@ -10,7 +10,7 @@
 |---|---|---|
 | Caike Roberto de Souza Hollo | RM568104 | 2TDSPA |
 | Gabriel Deotti Zanatta | RM567258 | 2TDSPA |
-| Gianluca K. Araujo | RM566765 | 2TDSPA |
+| Gianluca Kenis de Araujo | RM566765 | 2TDSPA |
 | Giovanni Sacristan | RM567548 | 2TDSPA |
 | Murilo Massini | RM567383 | 2TDSPA |
 
